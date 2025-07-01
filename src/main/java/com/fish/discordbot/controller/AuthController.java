@@ -16,12 +16,31 @@ public class AuthController {
 
     @GetMapping("/welcome")
     public String welcome(@AuthenticationPrincipal OAuth2User principal, Model model) {
-        model.addAttribute("name", principal.getAttribute("username"));
+        String username = principal.getAttribute("username");
+        String id = principal.getAttribute("id");
+        String avatar = principal.getAttribute("avatar");
+
+        System.out.println("Fetched Discord User Info:");
+        System.out.println("Username: " + username);
+        System.out.println("ID: " + id);
+        System.out.println("Avatar Hash: " + avatar);
+
+        model.addAttribute("name", username);
+        model.addAttribute("id", id);
+        model.addAttribute("avatar", avatar);
         return "welcome";
     }
+    
+
 
     @GetMapping("/login")
     public String login() {
         return "login";
     }
+
+    @GetMapping("/home")
+    public String redirectHome() {
+        return "redirect:/";
+    }
+
 }

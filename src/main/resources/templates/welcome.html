@@ -1,7 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome</title>
+</head>
 <body>
-<h2>Hello, <span th:text="${name}">User</span>!</h2>
-<p>You are successfully logged in with Discord.</p>
+    <h1>Welcome, <span th:text="${name}">Username</span>!</h1>
+
+    <img th:if="${avatar != null}" 
+        th:src="@{'https://cdn.discordapp.com/avatars/' + ${id} + '/' + ${avatar} + '.png'}"
+        alt="User Avatar" width="128" height="128"/>
+    <img th:if="${avatar == null}" src="/images/default-avatar.png"
+        alt="Default Avatar" width="128" height="128"/>
+
+
+    <p><a th:href="@{/logout}">Logout</a></p>
 </body>
 </html>

@@ -1,9 +1,13 @@
 spring:
+  application:
+    name: com.fish.discordbot
+
   datasource:
     url: jdbc:mysql://localhost:3306/discordbotdb
     username: root
     password: sam@1811
     driver-class-name: com.mysql.cj.jdbc.Driver
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -11,9 +15,31 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
   flyway:
-    enabled: true
-    baseline-on-migrate: true
-    locations: classpath:db/migration
+    enabled: false
+    url: jdbc:mysql://localhost:3306/discordbotdb
+    user: root
+    password: sam@1811
+
+  security:
+    oauth2:
+      client:
+        registration:
+          discord:
+            client-id: 1386775120642576395
+            client-secret: UHKRBX4ZNYh1FJOpgAt8t3i3jAHDlE_Q
+            scope:
+              - identify
+              - email
+            redirect-uri: "{baseUrl}/login/oauth2/code/discord"
+            client-name: Discord
+            authorization-grant-type: authorization_code
+
+        provider:
+          discord:
+            authorization-uri: https://discord.com/api/oauth2/authorize
+            token-uri: https://discord.com/api/oauth2/token
+            user-info-uri: https://discord.com/api/users/@me
+            user-name-attribute: username
 
 server:
   port: 8080
