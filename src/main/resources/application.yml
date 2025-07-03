@@ -15,7 +15,9 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
   flyway:
-    enabled: false
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
     url: jdbc:mysql://localhost:3306/discordbotdb
     user: root
     password: sam@1811

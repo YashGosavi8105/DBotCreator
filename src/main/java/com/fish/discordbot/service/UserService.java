@@ -1,5 +1,6 @@
 package com.fish.discordbot.service;
 
+import com.fish.discordbot.model.dto.UserDTO;
 import com.fish.discordbot.model.entity.User;
 import com.fish.discordbot.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,26 @@ public class UserService {
     }
 
     public Optional<User> findByDiscordId(String discordId) {
+        return userRepository.findByDiscordId(discordId);
+    }
+
+    public User findOrCreateUser(UserDTO userDTO) {
+        Optional<User> existingUser = userRepository.findByDiscordId(userDTO.getDiscordId());
+
+        if (existingUser.isPresent()) {
+            return existingUser.get();
+        } else {
+            User newUser = User.builder()
+                    .discordId(userDTO.getDiscordId())
+                    .username(userDTO.getUsername())
+                    .email(userDTO.getEmail())
+                    .avatarUrl(userDTO.getAvatarUrl())
+                    .build();
+            return userRepository.save(newUser);
+        }
+    }
+
+    public Optional<User> getUserByDiscordId(String discordId) {
         return userRepository.findByDiscordId(discordId);
     }
 }
