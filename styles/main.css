@@ -1,0 +1,114 @@
+/* ---------- RESET & BACKDROP ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; width: 100%; overflow-x: hidden; }
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(ellipse at 50% -10%,
+              #323cc8 0%, #1b1d44 45%, #090a14 100%);
+  overflow: hidden;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  color: #fff;
+}
+
+/* ---------- STARFIELD ---------- */
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.9);
+  pointer-events: none;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%,100% { opacity:.25; transform:scale(.8); }
+  50%     { opacity:1;   transform:scale(1);  }
+}
+
+/* ---------- HERO SECTION ---------- */
+.hero {
+  position: relative;
+  text-align: center;
+  z-index: 10;                  /* above stars & robots */
+}
+
+.project-title {
+  font-size: clamp(2.8rem, 6vw + 1rem, 6rem);
+  font-weight: 800;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg,#9ba8ff 0%,#fff 45%,#9ba8ff 100%);
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 20px rgba(155,168,255,.6);
+  margin-bottom: 1.2rem;
+}
+
+/* ---------- CTA BUTTON ---------- */
+#connectBtn {
+  padding: 1rem 2.8rem;
+  font-size: 2.25rem;
+  color: #fff;
+  background: #5865f2;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: transform .2s;
+  box-shadow:
+    0 0   0   0   rgba(88,101,242,.65),
+    0 0  14px 6px rgba(88,101,242,.45),
+    inset 0 0 12px 4px rgba(0,0,0,.25);
+  animation: glow 3s ease-in-out infinite alternate;
+}
+
+#connectBtn:hover { transform: scale(1.05); }
+
+@keyframes glow {
+  from { box-shadow:0 0 6px 0 rgba(88,101,242,.6),
+                     0 0 20px 10px rgba(88,101,242,.3),
+                     inset 0 0 6px 2px rgba(255,255,255,.1); }
+  to   { box-shadow:0 0 0 0 rgba(88,101,242,.9),
+                     0 0 28px 14px rgba(88,101,242,.6),
+                     inset 0 0 14px 4px rgba(255,255,255,.2); }
+}
+
+/* ---------- ROBOTS ---------- */
+/* Moving robots (as before) */
+/* ---------- MOVING ROBOTS (step-by-step) ---------- */
+.robot {
+  position: absolute;
+  bottom: 8vh;
+  height: 400px;                 /* bigger robot */
+  pointer-events: none;
+  /*  ▸ steps() makes the motion discrete, like feet hitting the ground
+      ▸ var(--dur) still controls speed (e.g. 30-45 s in robots.js) */
+  animation: march var(--dur) steps(40) infinite;
+  animation-delay: var(--delay);
+  transform-origin: center;
+}
+
+@keyframes march {
+  /* walk right */
+  0%   { transform: translateX(-20vw) translateY(0)   scaleX(1); }
+  25%  { transform: translateX(25vw)  translateY(-4px) scaleX(1); }
+  49.9%{ transform: translateX(110vw) translateY(0)   scaleX(1); }
+
+  /* instant flip, start walking left */
+  50%  { transform: translateX(110vw) translateY(0)   scaleX(-1); }
+  75%  { transform: translateX(60vw)  translateY(-4px) scaleX(-1); }
+  100% { transform: translateX(-20vw) translateY(0)   scaleX(-1); }
+}
+
+
+/* Static bots just placed once */
+.static-bot {
+  position: absolute;
+  bottom: 8vh;
+  height: 500px;
+  pointer-events: none;
+  transform: translateX(-50%);
+}
+
+
+
