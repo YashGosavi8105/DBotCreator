@@ -8,11 +8,28 @@ export async function fetchGeminiResponse(prompt: string): Promise<string> {
   if (!apiKey) throw new Error("VITE_GEMINI_API_KEY not found");
 
   const fullPrompt = `
-You're an expert software engineer. Based on the following description, generate a project scaffold for a Discord bot.
+You're an expert software engineer.
 
-Respond with Markdown using headings for filenames and code blocks for file content.
+Create a fully functional Discord bot project using the best-suited language for the task (either Python or JavaScript).
 
-Discord Bot Idea:
+Requirements:
+- Implement at least one real feature (e.g., welcome message, moderation, custom commands)
+- Use best practices and working code
+- Include only these 4 files:
+  - bot.{py|js} → main bot logic
+  - config.json → configuration file 
+  - .env → environment variables
+  - README.md → instructions
+
+🧾 Output Format:
+1. Each file should start with a Markdown heading: ## filename (e.g., ## bot.py or ## bot.js)
+2. Follow each heading with a triple backtick code block and the file content.
+3. Do not include any text outside the file headers and code blocks.
+4. All code must be runnable and complete — no placeholders or explanations.
+
+Your response must be clean and ready to parse into actual files for ZIP download.
+
+Begin now.
 ${prompt}
 `;
 

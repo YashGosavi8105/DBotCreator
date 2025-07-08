@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { Logo } from '@/components/Logo';
 import { ChatMessage } from '@/components/ChatMessage';
 import { ChatInput } from '@/components/ChatInput';
-import { BotPreview } from '@/components/BotPreview';
 import { DeploymentStatus } from '@/components/DeploymentStatus';
 import { useChat } from '@/hooks/useChat';
 import { useDeployment } from '@/hooks/useDeployment';
-import { ArrowRightIcon } from 'lucide-react';
 import { createZipFromMarkdown } from '@/lib/createZipFromMarkdown';
+
 
 const WELCOME_MESSAGE = "Hi! I'm the Discord Bot Wizard. Describe what kind of Discord bot you want to create, and I'll help you build it without writing any code.";
 
 const Index = () => {
-  const [step, setStep] = useState<'chat' | 'preview' | 'deployment'>('chat');
+  const [step, setStep] = useState<'chat' | 'deployment'>('chat'); // removed 'preview'
 
   const {
     messages,
@@ -21,7 +20,7 @@ const Index = () => {
     botData,
     geminiResponse
   } = useChat({
-    initialMessages: [{ role: 'assistant', content: WELCOME_MESSAGE }]
+    initialMessages: [{ role: 'assistant' as const, content: WELCOME_MESSAGE }]
   });
 
   const {
@@ -38,7 +37,6 @@ const Index = () => {
     if (botData) deployBot(botData);
   };
 
-  const handleEditBot = () => setStep('chat');
   const handleDeploymentDone = () => {
     resetDeployment();
     setStep('chat');
@@ -74,18 +72,7 @@ const Index = () => {
             </div>
 
             <div className="mt-auto">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-muted-foreground">Describe your ideal Discord bot</span>
-                {botData && (
-                  <button
-                    onClick={() => setStep('preview')}
-                    className="flex items-center gap-1 text-discord-blurple hover:underline text-sm"
-                  >
-                    Preview Bot <ArrowRightIcon className="h-3 w-3" />
-                  </button>
-                )}
-              </div>
-
+              <span className="text-sm text-muted-foreground">Describe your ideal Discord bot</span>
               <ChatInput
                 onSubmit={sendMessage}
                 isLoading={isLoading}
@@ -93,28 +80,15 @@ const Index = () => {
               />
 
               {geminiResponse && (
-  <button
-    onClick={() => createZipFromMarkdown(geminiResponse)}
-    className="mt-4 bg-discord-blurple text-white px-4 py-2 rounded"
-  >
-    Download Bot Code
-  </button>
-)}
-
+                <button
+                  onClick={() => createZipFromMarkdown(geminiResponse)}
+                  className="mt-4 bg-discord-blurple text-white px-4 py-2 rounded"
+                >
+                  Download Bot Code
+                </button>
+              )}
             </div>
           </>
-        )}
-
-        {step === 'preview' && botData && (
-          <div className="flex-1 flex items-center justify-center">
-            <BotPreview
-              name={botData.name}
-              description={botData.description}
-              features={botData.features}
-              onConfirm={handleConfirmBot}
-              onEdit={handleEditBot}
-            />
-          </div>
         )}
 
         {step === 'deployment' && botData && (
@@ -148,5 +122,6 @@ const Index = () => {
 };
 
 export default Index;
+
 
 
