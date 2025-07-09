@@ -24,6 +24,12 @@ public class AuthController {
         return "home";
     }
 
+    @GetMapping("/index")
+    public String index()
+    {
+        return "index";
+    }
+    
     @GetMapping("/welcome")
     public String welcome(@AuthenticationPrincipal OAuth2User principal, Model model) {
         // Add null check for principal

@@ -59,8 +59,3 @@ STATIC_OBJECTS.forEach((obj) => {
 function rand(min, max) {
   return Math.random() * (max - min) + min;
 }
-
-
-
-
-
