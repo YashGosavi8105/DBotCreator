@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import { Logo } from '@/components/Logo';
-import { ChatMessage } from '@/components/ChatMessage';
-import { ChatInput } from '@/components/ChatInput';
-import { DeploymentStatus } from '@/components/DeploymentStatus';
 import { useChat } from '@/hooks/useChat';
 import { useDeployment } from '@/hooks/useDeployment';
 import { createZipFromMarkdown } from '@/lib/createZipFromMarkdown';
+import { useNavigate } from 'react-router-dom';
+import '../index.css';
 
-
-const WELCOME_MESSAGE = "Hi! I'm the Discord Bot Wizard. Describe what kind of Discord bot you want to create, and I'll help you build it without writing any code.";
 
 const Index = () => {
-  const [step, setStep] = useState<'chat' | 'deployment'>('chat'); // removed 'preview'
+  const [step, setStep] = useState<'chat' | 'deployment'>('chat');
+  const navigate = useNavigate();
 
   const {
     messages,
@@ -20,14 +17,13 @@ const Index = () => {
     botData,
     geminiResponse
   } = useChat({
-    initialMessages: [{ role: 'assistant' as const, content: WELCOME_MESSAGE }]
+    initialMessages: [{ role: 'assistant', content: "Hi! I'm the Discord Bot Wizard. Describe what kind of Discord bot you want to create, and I'll help you build it without writing any code." }]
   });
 
   const {
     status: deploymentStatus,
     deployBot,
     reset: resetDeployment,
-    apiKey: deploymentApiKey,
     downloadUrl,
     setupInstructions
   } = useDeployment();
@@ -43,85 +39,55 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-discord-darkest">
-      <header className="border-b border-secondary p-4 flex justify-between items-center">
-        <Logo />
+    <div className="app-container">
+      <header className="app-header">
+        <div className="header-left">
+          <span role="img" aria-label="logo">👾</span> Discord Bot
+        </div>
+        <div className="header-right">
+          <button onClick={() => navigate('/profile')} className="profile-button" title="Go to Profile">👤</button>
+        </div>
       </header>
 
-      <main className="flex-1 flex flex-col p-4 md:p-8 max-w-4xl mx-auto w-full">
-        {step === 'chat' && (
-          <>
-            <div className="flex-1 overflow-y-auto chat-scrollbar mb-4 space-y-2">
-              {messages.map((message, index) => (
-                <ChatMessage
-                  key={index}
-                  message={message.content}
-                  isUser={message.role === 'user'}
-                />
-              ))}
-
-              {isLoading && (
-                <div className="flex justify-center my-4">
-                  <div className="flex space-x-1">
-                    <div className="w-2 h-2 bg-discord-blurple rounded-full animate-bounce" />
-                    <div className="w-2 h-2 bg-discord-blurple rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                    <div className="w-2 h-2 bg-discord-blurple rounded-full animate-bounce" style={{ animationDelay: '0.4s' }} />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="mt-auto">
-              <span className="text-sm text-muted-foreground">Describe your ideal Discord bot</span>
-              <ChatInput
-                onSubmit={sendMessage}
-                isLoading={isLoading}
-                placeholder="e.g., I need a moderation bot that can welcome new users..."
-              />
-
-              {geminiResponse && (
-                <button
-                  onClick={() => createZipFromMarkdown(geminiResponse)}
-                  className="mt-4 bg-discord-blurple text-white px-4 py-2 rounded"
-                >
-                  Download Bot Code
-                </button>
-              )}
-            </div>
-          </>
-        )}
-
-        {step === 'deployment' && botData && (
-          <div className="flex-1 flex items-center justify-center">
-            <DeploymentStatus
-              status={deploymentStatus}
-              botName={botData.name}
-              onDone={handleDeploymentDone}
-              downloadUrl={downloadUrl}
-              setupInstructions={setupInstructions}
-            />
+      <main className="chat-container">
+        {messages.map((msg, idx) => (
+          <div key={idx} className={`chat-message ${msg.role === 'user' ? 'user' : 'assistant'}`}>
+            <strong>{msg.role === 'user' ? 'YOU' : ''}</strong> {msg.content}
           </div>
+        ))}
+
+        {isLoading && (
+          <div className="loading">Thinking...</div>
         )}
       </main>
 
-      <footer className="border-t border-secondary p-4">
-        <div className="flex justify-between items-center max-w-4xl mx-auto w-full">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Discord Bot Wizard
-          </p>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <div className={`h-2 w-2 rounded-full ${deploymentApiKey ? 'bg-discord-green' : 'bg-discord-red'}`} />
-              <span className="text-xs text-muted-foreground">Deployment API</span>
-            </div>
-          </div>
+      <div className="chat-input-container">
+        <textarea
+          placeholder="e.g., I need a moderation bot that ..."
+          disabled={isLoading}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              sendMessage(e.currentTarget.value);
+              e.currentTarget.value = '';
+            }
+          }}
+        ></textarea>
+        <button onClick={() => {
+          const textarea = document.querySelector('textarea');
+          if (textarea) sendMessage(textarea.value);
+        }}>➤</button>
+      </div>
+
+      {geminiResponse && (
+        <div className="download-btn-container">
+          <button onClick={() => createZipFromMarkdown(geminiResponse)}>Download Bot Code</button>
         </div>
-      </footer>
+      )}
+
+      <footer className="footer">© 2025 Discord Bot Wizard</footer>
     </div>
   );
 };
 
 export default Index;
-
-
-
