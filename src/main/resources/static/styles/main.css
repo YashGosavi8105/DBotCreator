@@ -1,19 +1,18 @@
-/* ---------- RESET & BACKDROP ---------- */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; width: 100%; overflow-x: hidden; }
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: radial-gradient(ellipse at 50% -10%,
-              #323cc8 0%, #1b1d44 45%, #090a14 100%);
-  overflow: hidden;
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;              /* 👈 makes centering easy */
+  justify-content: center;    /* vertical center */
+  align-items: center;        /* horizontal center */
+  flex-direction: column;     /* keep natural top-down order */
   font-family: "Segoe UI", Roboto, sans-serif;
+  background: radial-gradient(ellipse at 50% -10%, #323cc8 0%, #1b1d44 45%, #090a14 100%);
   color: #fff;
 }
 
-/* ---------- STARFIELD ---------- */
+/* ---------- STARS ---------- */
 .star {
   position: absolute;
   border-radius: 50%;
@@ -23,15 +22,15 @@ body {
 }
 
 @keyframes twinkle {
-  0%,100% { opacity:.25; transform:scale(.8); }
+  0%,100% { opacity:.35; transform:scale(.8); }
   50%     { opacity:1;   transform:scale(1);  }
 }
 
-/* ---------- HERO SECTION ---------- */
+/* ---------- HERO CENTER ---------- */
 .hero {
-  position: relative;
   text-align: center;
-  z-index: 10;                  /* above stars & robots */
+  z-index: 10;        /* above stars & robots */
+  margin: 0;          /* remove old margin-top */
 }
 
 .project-title {
@@ -45,10 +44,10 @@ body {
   margin-bottom: 1.2rem;
 }
 
-/* ---------- CTA BUTTON ---------- */
+/* ---------- DISCORD BUTTON ---------- */
 #connectBtn {
   padding: 1rem 2.8rem;
-  font-size: 2.25rem;
+  font-size: clamp(1rem, 1.8vw, 2.3rem);
   color: #fff;
   background: #5865f2;
   border: none;
@@ -61,7 +60,6 @@ body {
     inset 0 0 12px 4px rgba(0,0,0,.25);
   animation: glow 3s ease-in-out infinite alternate;
 }
-
 #connectBtn:hover { transform: scale(1.05); }
 
 @keyframes glow {
@@ -73,39 +71,33 @@ body {
                      inset 0 0 14px 4px rgba(255,255,255,.2); }
 }
 
-/* ---------- ROBOTS ---------- */
-/* Moving robots (as before) */
-/* ---------- MOVING ROBOTS (step-by-step) ---------- */
+/* ---------- MOVING ROBOTS ---------- */
 .robot {
   position: absolute;
   bottom: 8vh;
-  height: 400px;                 /* bigger robot */
   pointer-events: none;
-  /*  ▸ steps() makes the motion discrete, like feet hitting the ground
-      ▸ var(--dur) still controls speed (e.g. 30-45 s in robots.js) */
-  animation: march var(--dur) steps(40) infinite;
+  animation: march var(--dur) steps(40, end) infinite;
   animation-delay: var(--delay);
   transform-origin: center;
 }
 
 @keyframes march {
-  /* walk right */
   0%   { transform: translateX(-20vw) translateY(0)   scaleX(1); }
   25%  { transform: translateX(25vw)  translateY(-4px) scaleX(1); }
   49.9%{ transform: translateX(110vw) translateY(0)   scaleX(1); }
-
-  /* instant flip, start walking left */
   50%  { transform: translateX(110vw) translateY(0)   scaleX(-1); }
   75%  { transform: translateX(60vw)  translateY(-4px) scaleX(-1); }
   100% { transform: translateX(-20vw) translateY(0)   scaleX(-1); }
 }
 
-
-/* Static bots just placed once */
+/* ---------- STATIC BOTS ---------- */
 .static-bot {
   position: absolute;
   bottom: 8vh;
-  height: 500px;
   pointer-events: none;
   transform: translateX(-50%);
 }
+
+
+
+

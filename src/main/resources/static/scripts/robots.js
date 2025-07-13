@@ -1,21 +1,19 @@
-/** robots.js — stars + 2 marching bots + customizable static bot sizes **/
+const STAR_COUNT = 100;
 
-const STAR_COUNT = 90;
-
-// Customize which bots move and which are static
+// Moving robots with responsive sizes
 const MOVING_ROBOTS = [
-  { file: "robot2.png", size: 500 },
-  
+  { file: "robot2.png", size: "clamp(550px, 12vw, 160px)" },
+  //{ file: "robot2.svg", size: "clamp(70px, 10vw, 130px)" },
 ];
 
+// Static bots with position and responsive size
 const STATIC_OBJECTS = [
-  { file: "robot3.png", size: 1500, position: "12vw" },  // left side
-  { file: "robot1.png", size: 700, position: "85vw" },   // right side
-  { file: "shield.svg", size: 110, position: "25vw" },   // somewhere in between
+  { file: "robot3.png", size: "clamp(1500px, 8vw, 100px)", position: "10vw" },
+  { file: "robot1.png",  size: "clamp(800px, 10vw, 130px)", position: "88vw" },
+  //{ file: "shield.svg",  size: "clamp(50px, 7vw, 90px)",   position: "22vw" }
 ];
 
-
-/* ⭐ Generate stars */
+/* ⭐ Stars */
 for (let i = 0; i < STAR_COUNT; i++) {
   const s = document.createElement("div");
   s.className = "star";
@@ -28,34 +26,39 @@ for (let i = 0; i < STAR_COUNT; i++) {
   document.body.appendChild(s);
 }
 
-/* 🤖 Create moving robots (only one of each) */
+/* 🤖 Moving robots */
 MOVING_ROBOTS.forEach((bot, i) => {
   const r = document.createElement("img");
   r.src = `assets/${bot.file}`;
   r.className = "robot";
 
-  r.style.height = `${bot.size}px`;                        // ✅ custom size
+  r.style.height = bot.size;
   r.style.left = `${rand(-10, 90)}vw`;
   r.style.setProperty("--dur", `${rand(30, 45)}s`);
   r.style.setProperty("--delay", `${i * 4}s`);
   document.body.appendChild(r);
 });
 
-/* 🚧 Create static robots (only one of each) */
+/* 🧍‍♂️ Static bots */
 STATIC_OBJECTS.forEach((obj) => {
   const img = document.createElement("img");
   img.src = `assets/${obj.file}`;
   img.className = "static-bot";
 
-  img.style.height = `${obj.size}px`;
-  img.style.left   = obj.position || "50vw";  // if position not given, default to center
+  img.style.height = obj.size;
+  img.style.left   = obj.position || "50vw";
   img.style.bottom = "8vh";
 
   document.body.appendChild(img);
 });
 
-
-/* 🔧 Utilities */
+/* 🛠 Helpers */
 function rand(min, max) {
   return Math.random() * (max - min) + min;
 }
+
+
+
+
+
+
