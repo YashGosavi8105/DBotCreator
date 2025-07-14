@@ -1,0 +1,11 @@
+com\fish\discordbot\controller\AuthController.class
+com\fish\discordbot\service\UserService.class
+com\fish\discordbot\model\dto\UserDTO$UserDTOBuilder.class
+com\fish\discordbot\controller\UserController.class
+com\fish\discordbot\model\dto\UserDTO.class
+com\fish\discordbot\model\entity\User$UserBuilder.class
+com\fish\discordbot\model\entity\User.class
+com\fish\discordbot\config\SecurityConfig.class
+com\fish\discordbot\security\CustomOAuth2SuccessHandler.class
+com\fish\discordbot\repository\UserRepository.class
+com\fish\discordbot\DiscordBotApplication.class
